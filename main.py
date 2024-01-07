@@ -3,7 +3,6 @@ import aiohttp
 
 from config import ADDRESSES
 
-
 from modules import chainbase_get_balance, get_module
 from sleeping import async_sleep
 from network import Network

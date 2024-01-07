@@ -7,15 +7,14 @@ from chainbase import Chainbase
 async def chainbase_get_balance(session, address, network, type):
     chainbase = Chainbase(session)
     await chainbase.get_token_balance(address, network, type)
-    wallets = chainbase.wallets
 
 
 def get_module():
     result = questionary.select(
         "Select a method to get started",
         choices=[
-            Choice("1) Get native token balances (Chainbase)", "native"),
-            Choice("2) Get ERC20 token balances (Chainbase)", "erc20"),
+            # Choice("1) Get native token balances (Chainbase)", "native"),
+            Choice("1) Get ERC20 token balances (Chainbase)", "erc20"),
         ],
         qmark="🛠 ",
         pointer="✅ ",

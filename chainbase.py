@@ -2,11 +2,13 @@ import asyncio
 from loguru import logger
 
 from config import CHAINBASE_API_KEY, URLS
+from excel_exporter import ExcelExporter
 from wallet import Wallet
 
 
 class Chainbase:
     def __init__(self, session):
+        self.chain_id = None
         self.session = session
         self.urls = URLS
         self.headers = {
@@ -28,8 +30,8 @@ class Chainbase:
                         resp_json = await resp.json(content_type=None)
                         wallet = Wallet(address, chain_id)
                         wallet.add_asset(resp_json["data"])
-                        logger.success(f"{address}")
-                        logger.info(resp_json)
+                        excel_exporter = ExcelExporter("balances.xlsx")
+                        excel_exporter.export_data(wallet, address, chain_id)
                         break
                     else:
                         await asyncio.sleep(sleep)

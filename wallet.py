@@ -1,3 +1,4 @@
+from converters import *
 from network import Network
 
 
@@ -12,12 +13,12 @@ class Wallet:
 
 class Asset:
     def __init__(self, balance, contract_address, current_usd_price, decimals, logos, name, symbol, total_supply, urls):
-        self.balance = balance
+        self.balance = convertHexToBalance(balance)
         self.contract_address = contract_address
         self.current_usd_price = current_usd_price
         self.decimals = decimals
         self.logos = logos
         self.name = name
         self.symbol = symbol
-        self.total_supply = total_supply
+        self.total_supply = convertHexToTotalSupply(total_supply, decimals)
         self.urls = urls
