@@ -36,11 +36,11 @@ class Chainbase:
 
                     if isinstance(resp_json["data"], str):
                         TxtExporter.export_txt(address, chain_id, resp_json)
-
-                    wallet = Wallet(address, chain_id)
-                    wallet.add_asset(resp_json["data"])
-                    excel_exporter = ExcelExporter("balances.xlsx")
-                    excel_exporter.export_data(wallet, address, chain_id)
+                    else:
+                        wallet = Wallet(address, chain_id)
+                        wallet.add_asset(resp_json["data"])
+                        excel_exporter = ExcelExporter("balances.xlsx")
+                        excel_exporter.export_data(wallet, address, chain_id)
                 else:
                     await asyncio.sleep(sleep)
 

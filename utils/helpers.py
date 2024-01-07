@@ -15,4 +15,4 @@ def convert_hex_to_total_supply(hex_value, decimals):
 
 @staticmethod
 def get_network(chain_id):
-    Network.networks.get(chain_id)
+    return Network.networks.get(chain_id)
