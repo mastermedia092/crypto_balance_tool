@@ -22,7 +22,6 @@ class Chainbase:
         params = {"chain_id": chain_id, "address": address, "limit": 20, "page": 1}
         try:
             sleep = 3
-
             async with self.session.get(
                 URLS[type], headers=self.headers, params=params, timeout=10
             ) as resp:
@@ -34,8 +33,8 @@ class Chainbase:
                         )
                         return
 
-                    if isinstance(resp_json["data"], str):
-                        TxtExporter.export_txt(address, chain_id, resp_json)
+                    if type == "native":
+                        TxtExporter.export_txt(address, chain_id, resp_json["data"])
                     else:
                         wallet = Wallet(address, chain_id)
                         wallet.add_asset(resp_json["data"])

@@ -1,6 +1,7 @@
 from utils import *
 from utils.helpers import convert_hex_to_balance, convert_hex_to_total_supply
 
+
 class Wallet:
     def __init__(self, address, chain_id):
         self.address = address
@@ -31,5 +32,10 @@ class Asset:
         self.logos = logos
         self.name = name
         self.symbol = symbol
-        self.total_supply = convert_hex_to_total_supply(total_supply, decimals)
+
+        if total_supply is "":
+            self.total_supply = total_supply
+        else:
+            self.total_supply = convert_hex_to_total_supply(total_supply, decimals)
+
         self.urls = urls
