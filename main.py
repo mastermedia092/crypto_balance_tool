@@ -2,10 +2,11 @@ import asyncio
 import aiohttp
 
 from config import ADDRESSES
+from modules import *
+from modules.network import Network
 
-from modules import chainbase_get_balance, get_module
-from sleeping import async_sleep
-from network import Network
+from settings import chainbase_get_balance, get_module
+from utils.sleeping import async_sleep
 
 
 async def run_module(session, address, network, module):

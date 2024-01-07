@@ -2,7 +2,7 @@ import os
 from loguru import logger
 from openpyxl import load_workbook, Workbook
 
-from network import Network
+from modules.network import Network
 
 
 class ExcelExporter:

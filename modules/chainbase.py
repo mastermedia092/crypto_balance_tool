@@ -1,13 +1,11 @@
 import asyncio
 from loguru import logger
-from web3 import Web3
 
 from config import CHAINBASE_API_KEY, URLS
-from converters import convertHexToBalance
-from excel_exporter import ExcelExporter
-from network import Network
-from wallet import Wallet
-import os
+from modules.txt_exporter import TxtExporter
+from utils.helpers import get_network
+from modules.excel_exporter import ExcelExporter
+from modules.wallet import Wallet
 
 
 class Chainbase:
@@ -31,17 +29,13 @@ class Chainbase:
                 if resp.status == 200:
                     resp_json = await resp.json(content_type=None)
                     if resp_json["data"] is None:
-                        logger.warning(f"no data for {address} on {Network.networks.get(chain_id)}")
+                        logger.warning(
+                            f"no data for {address} on {get_network(chain_id)}"
+                        )
                         return
 
                     if isinstance(resp_json["data"], str):
-                        balance = convertHexToBalance(resp_json["data"])
-                        
-                        # Save result to txt file
-                        result = f"{address} - {chain_id} - {balance}"
-                        with open("balances.txt", "a") as file:
-                            file.write(result + "\n")
-                            return
+                        TxtExporter.export_txt(address, chain_id, resp_json)
 
                     wallet = Wallet(address, chain_id)
                     wallet.add_asset(resp_json["data"])
