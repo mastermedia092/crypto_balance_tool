@@ -17,7 +17,7 @@ async def main(module):
         for address in ADDRESSES:
             for network in Network.networks:
                 await run_module(session, address, network, module)
-                async_sleep(10, 20)
+                await async_sleep(10, 20)
 
 
 if __name__ == "__main__":

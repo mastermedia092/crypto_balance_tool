@@ -3,6 +3,7 @@ from loguru import logger
 
 from config import CHAINBASE_API_KEY, URLS
 from excel_exporter import ExcelExporter
+from network import Network
 from wallet import Wallet
 
 
@@ -18,25 +19,26 @@ class Chainbase:
 
     async def get_token_balance(self, address, chain_id, type):
         params = {"chain_id": chain_id, "address": address, "limit": 20, "page": 1}
+        try:
+            sleep = 3
 
-        while True:
-            try:
-                sleep = 3
+            async with self.session.get(
+                URLS[type], headers=self.headers, params=params, timeout=10
+            ) as resp:
+                if resp.status == 200:
+                    resp_json = await resp.json(content_type=None)
+                    if(resp_json["data"] == None):
+                        logger.warning(f"no data for {address} on {Network.networks.get(chain_id)}")
+                        return
+                    
+                    wallet = Wallet(address, chain_id)
+                    wallet.add_asset(resp_json["data"])
+                    excel_exporter = ExcelExporter("balances.xlsx")
+                    excel_exporter.export_data(wallet, address, chain_id)
+                else:
+                    await asyncio.sleep(sleep)
 
-                async with self.session.get(
-                    URLS[type], headers=self.headers, params=params, timeout=10
-                ) as resp:
-                    if resp.status == 200:
-                        resp_json = await resp.json(content_type=None)
-                        wallet = Wallet(address, chain_id)
-                        wallet.add_asset(resp_json["data"])
-                        excel_exporter = ExcelExporter("balances.xlsx")
-                        excel_exporter.export_data(wallet, address, chain_id)
-                        break
-                    else:
-                        await asyncio.sleep(sleep)
-
-            except Exception as error:
-                logger.info(f"error: {error}")
-                logger.info(f"{address} : {error}, try again in {sleep} sec.")
-                await asyncio.sleep(3)
+        except Exception as error:
+            logger.info(f"error: {error}")
+            logger.info(f"{address} : {error}, try again in {sleep} sec.")
+            await asyncio.sleep(3)

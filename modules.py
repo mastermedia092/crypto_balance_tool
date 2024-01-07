@@ -13,7 +13,7 @@ def get_module():
     result = questionary.select(
         "Select a method to get started",
         choices=[
-            # Choice("1) Get native token balances (Chainbase)", "native"),
+            Choice("1) Get native token balances (Chainbase)", "native"),
             Choice("1) Get ERC20 token balances (Chainbase)", "erc20"),
         ],
         qmark="🛠 ",
