@@ -16,3 +16,9 @@ def convert_hex_to_total_supply(hex_value, decimals):
 @staticmethod
 def get_network(chain_id):
     return Network.networks.get(chain_id)
+
+@staticmethod
+def convert_eth_to_usdt(eth_amount):
+    eth_to_usdt_rate = 2470,43
+    return eth_amount * eth_to_usdt_rate
+
